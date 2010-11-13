@@ -1,5 +1,6 @@
 JxbMe::Application.routes.draw do
-  resources :sites
+  resources :sites, :only => [:create]
+  match '/:url' => 'sites#show', :url => /[a-z0-9]{1,6}/, :as => :short
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -1,9 +1,14 @@
 class SitesController < ApplicationController
   def show
-    @site = Site.find(params[:id])
+    @site = Site.find_with_url(params[:url])
 
     respond_to do |format|
-      format.json  { render :json => @site }
+      if @site
+        format.html { redirect_to @site.url }
+        format.json { render :json => @site.url }
+      else
+        format.json { render :text => '', :status => :not_found }
+      end
     end
   end
 
@@ -12,19 +17,10 @@ class SitesController < ApplicationController
 
     respond_to do |format|
       if @site.save
-        format.json  { render :json => @site, :status => :created, :location => @site }
+        format.json { render :json => short_url(@site), :status => :created }
       else
-        format.json  { render :json => @site.errors, :status => :unprocessable_entity }
+        format.json { render :json => @site.errors, :status => :unprocessable_entity }
       end
-    end
-  end
-
-  def destroy
-    @site = Site.find(params[:id])
-    @site.destroy
-
-    respond_to do |format|
-      format.json  { head :ok }
     end
   end
 end
