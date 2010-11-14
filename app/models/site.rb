@@ -2,17 +2,49 @@ class Site < ActiveRecord::Base
   validates_presence_of :url
   validates_length_of :url, :in => 1..2048
   validates_format_of :url, :with => /^(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))$/
+  before_create :make_short_url
+
+  CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   def self.find_with_url(u)
-    self.where(["id = ?", u.to_i(36)]).first
+    self.where(:short_url => u).first
   end
 
-  # def short_url
-    # "http://jxb.me/#{id.to_s(36)}"
-  # end
-
   def to_param
-    id.to_s(36)
+    short_url
+  end
+
+  private
+  def make_short_url
+    t = Time.zone.now
+    num = t.to_i + t.usec
+    self.short_url = encode(num)
+  end
+
+  def encode(num, alphabet=CHARS)
+    return alphabet[0] if num == 0
+    result = []
+    base = alphabet.size
+    while num > 0
+      rem = num % base
+      num /= base
+      result << alphabet[rem].chr
+    end
+    result.reverse.join
+  end
+
+  # unused right now, but wtf.  might as well have it
+  def decode(str, alphabet=CHARS)
+    base = alphabet.size
+    l = str.size
+    num, i = 0, 0
+
+    str.chars do |c|
+      power = l - (i + 1)
+      num += (alphabet.index(c) * (base ** power))
+      i += 1
+    end
+    num
   end
 end
 
