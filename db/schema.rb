@@ -10,13 +10,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20101114050052) do
+ActiveRecord::Schema.define(:version => 20101115042447) do
 
   create_table "sites", :force => true do |t|
     t.string   "url",        :limit => 2048
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "short_url"
+    t.integer  "key"
+    t.text     "long_url"
   end
 
   add_index "sites", ["short_url"], :name => "index_sites_on_short_url"
