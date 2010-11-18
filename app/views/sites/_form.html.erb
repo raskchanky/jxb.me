@@ -12,6 +12,7 @@
   <% end %>
 
   <div class="actions">
-    <%= f.submit %>
+    <p><%= f.text_field :url, :size => 40 %></p>
+    <%= f.submit 'Shorten this bad boy!' %>
   </div>
 <% end %>

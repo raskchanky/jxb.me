@@ -1,5 +1,5 @@
-<p id="notice"><%= notice %></p>
+<p>Original URL: <%= @site.url %></p>
+<p>Short Version: <%= link_to shortened_url(@site.short_url), shortened_url(@site.short_url) %></p>
+<p>Long Version: <%= link_to lengthened_url(@site.long_url), lengthened_url(@site.long_url) %></p>
 
-
-<%= link_to 'Edit', edit_site_path(@site) %> |
-<%= link_to 'Back', sites_path %>
+<p><%= link_to 'Shorten another one!', root_path %></p>
