@@ -3,8 +3,13 @@ set :repository,  "git@github.com:raskchanky/jxb.me.git"
 set :scm, :git
 set :domain, "fatslice"
 set :use_sudo, false
-set :branch, "master"
 set :deploy_via, :remote_cache
+set :user, "deploy"
+set :branch, "master"
+set :application_url, "jxb.me"
+set :deploy_to, "/var/www/apps/jxb.me"
+set :rails_env, "production"
+set :runner, user
 
 role :web, domain
 role :app, domain
