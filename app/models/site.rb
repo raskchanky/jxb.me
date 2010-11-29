@@ -24,9 +24,9 @@ class Site < ActiveRecord::Base
   end
 
   def generate_long_url
-    u = URI.parse(url)
+    md = /^https?:\/\/(.*)$/.match(url)
     result = []
-    u.host.chars { |c| result << encode(c.ord, '01') }
+    md[1].chars { |c| result << encode(c.ord, '01') }
     result.join
   end
 
